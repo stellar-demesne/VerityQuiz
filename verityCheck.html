@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verity Quiz</title>
+    <link rel="stylesheet" href="verity.css" />
+</head>
+<body>
+<div id="meta-area">
+    <div id="options-area">
+        <div id="options-choose-inside" class="this-is-a-button">Inside</div>
+        <div id="options-choose-outside" class="this-is-a-button">Outside</div>
+        <div id="options-choose-full" class="this-is-a-button">Full Encounter</div>
+        <div id="options-choose-faststrat">
+            <input type="checkbox" id="sorting" disabled checked><label for="sorting">Fast Strat</label>
+        </div>
+    </div>
+    <div id="meta-spacer"></div>
+    <div id="score-tracker">
+        <div id="score-numbers">
+            <div id="wins"></div>
+            <div id="losses"></div>
+            <div id="streak"></div>
+        </div>
+        <div id="score-reset" class="this-is-a-button">Reset</div>
+    </div>
+</div>
+<div id="round-end-div">
+    <dialog id="round-end-screen">
+        <div id="round-end-title">yay</div>
+        <div id="round-end-text"></div>
+        <button id="round-end-button" class="this-is-a-button">Go again?</button>
+    </dialog>
+</div>
+<div id="quiz-area">
+    <div id="inside-view">
+        <div id="projector-spacing-inside">
+            <div id="projector-screen-inside">
+                "triangle square"
+            </div>
+        </div>
+        <div id="projector-spacer"></div>
+        <div id="enemies-inside">
+            <div id="knight-inside-left">
+                <div class="knight"></div>
+                <div class="splinter"></div>
+            </div>
+            <div id="ogre-inside" class="ogre"></div>
+            <div id="knight-inside-right">
+                <div class="knight"></div>
+                <div class="splinter"></div>
+            </div>
+        </div>
+        <div id="forward-statues-inside">
+            <div id="statue-left-inside">
+                <div id="shadow-left"></div>
+                <div id="guardian-left-inside"></div>
+                <div id="inside-pedestal-front-left" class="pedestal"></div>
+            </div>
+            <div id="statue-centre-inside">
+                <div id="shadow-centre"></div>
+                <div id="guardian-centre-inside"></div>
+                <div id="inside-pedestal-front-centre" class="pedestal"></div>
+            </div>
+            <div id="statue-right-inside">
+                <div id="shadow-right"></div>
+                <div id="guardian-right-inside"></div>
+                <div id="inside-pedestal-front-right" class="pedestal"></div>
+            </div>
+        </div>
+        <div id="glass-wall"></div>
+        <div id="spawn-circle-inside"><!-- i.e., ghosts phase -->
+            <div id="spawn-circle-grid">
+                <div id="inside-statue-1">
+                    <div id="inside-guardian-statue-1"></div>
+                    <div id="inside-pedestal-1" class="pedestal">
+                        <div id="inside-glow-1" class="pedestal-not-glow"></div>
+                    </div>
+                </div>
+                <div id="inside-statue-2">
+                    <div id="inside-guardian-statue-2"></div>
+                    <div id="inside-pedestal-2" class="pedestal">
+                        <div id="inside-glow-2" class="pedestal-not-glow"></div>
+                    </div>
+                </div>
+                <div id="inside-statue-3">
+                    <div id="inside-guardian-statue-3"></div>
+                    <div id="inside-pedestal-3" class="pedestal">
+                        <div id="inside-glow-3" class="pedestal-not-glow"></div>
+                    </div>
+                </div>
+                <div id="inside-statue-4">
+                    <div id="inside-guardian-statue-4"></div>
+                    <div id="inside-pedestal-4" class="pedestal">
+                        <div id="inside-glow-4" class="pedestal-not-glow"></div>
+                    </div>
+                </div>
+                <div id="inside-statue-5">
+                    <div id="inside-guardian-statue-5"></div>
+                    <div id="inside-pedestal-5" class="pedestal">
+                        <div id="inside-glow-5" class="pedestal-not-glow"></div>
+                    </div>
+                </div>
+                <div id="inside-statue-6">
+                    <div id="inside-guardian-statue-6"></div>
+                    <div id="inside-pedestal-6" class="pedestal">
+                        <div id="inside-glow-6" class="pedestal-not-glow"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="leave" class="this-is-a-button">leave through glass</div>
+    </div>
+    <div id="outside-view">
+        <div id="projector-screen-outside" class="projector">
+        </div>
+        <div id="projector-spacer"></div>
+        <div id="enemies-outside">
+            <div id="ogre-outside-left" class="ogre-unstop"></div>
+            <div id="knight-outside-left">
+                <div class="knight"></div>
+                <div class="splinter"></div>
+            </div>
+            <div id="knight-outside-centre">
+                <div class="knight"></div>
+                <div class="splinter"></div>
+            </div>
+            <div id="knight-outside-right">
+                <div class="knight"></div>
+                <div class="splinter"></div>
+            </div>
+            <div id="ogre-outside-right" class="ogre-unstop"></div>
+        </div>
+        <div id="ghosts-layer">
+            <div id="ghosts-grid">
+                <div id="ghost-1" class="ghost"></div>
+                <div id="ghost-2" class="ghost"></div>
+                <div id="ghost-3" class="ghost"></div>
+            </div>
+        </div>
+        <div id="forward-statues-outside">
+            <div id="statue-left-outside">
+                <div id="shape-left"></div>
+                <div id="guardian-left-outside"></div>
+                <div id="pedestal-left-outside" class="pedestal">
+                <div id="left-selected"></div>
+                </div>
+            </div>
+            <div id="statue-centre-outside">
+                <div id="shape-centre"></div>
+                <div id="guardian-centre-outside"></div>
+                <div id="pedestal-centre-outside" class="pedestal">
+                <div id="centre-selected"></div>
+                </div>
+            </div>
+            <div id="statue-right-outside">
+                <div id="shape-right"></div>
+                <div id="guardian-right-outside"></div>
+                <div id="pedestal-right-outside" class="pedestal">
+                <div id="right-selected"></div>
+                </div>
+            </div>
+        </div>
+        <div id="outside-wall-spacer"> </div>
+        <div id="spawn-circle-outside">
+            <div id="spawn-circle-grid">
+                <div id="outside-statue-1">
+                    <div id="outside-guardian-statue-1"></div>
+                    <div id="outside-pedestal-1" class="pedestal">
+                        <div id="outside-glow-1" class="pedestal-not-glow"></div>
+                    </div>
+                </div>
+                <div id="outside-statue-2">
+                    <div id="outside-guardian-statue-2"></div>
+                    <div id="outside-pedestal-2" class="pedestal">
+                        <div id="outside-glow-2" class="pedestal-not-glow"></div>
+                    </div>
+                </div>
+                <div id="outside-statue-3">
+                    <div id="outside-guardian-statue-3"></div>
+                    <div id="outside-pedestal-3" class="pedestal">
+                        <div id="outside-glow-3" class="pedestal-not-glow"></div>
+                    </div>
+                </div>
+                <div id="outside-statue-4">
+                    <div id="outside-guardian-statue-4"></div>
+                    <div id="outside-pedestal-4" class="pedestal">
+                        <div id="outside-glow-4" class="pedestal-not-glow"></div>
+                    </div>
+                </div>
+                <div id="outside-statue-5">
+                    <div id="outside-guardian-statue-5"></div>
+                    <div id="outside-pedestal-5" class="pedestal">
+                        <div id="outside-glow-5" class="pedestal-not-glow"></div>
+                    </div>
+                </div>
+                <div id="outside-statue-6">
+                    <div id="outside-guardian-statue-6"></div>
+                    <div id="outside-pedestal-6" class="pedestal">
+                        <div id="outside-glow-6" class="pedestal-not-glow"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="wait" class="this-is-a-button">wait for solo players</div>
+    </div>
+    <div id="hud">
+        <div id="buffs">
+            <div id="shape_buff">orbicular</div>
+            <div id="ghost_buff"></div>
+        </div>
+        <div id="chatbox">
+            --
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="verity.js"> </script>
+</body>
+</html>
