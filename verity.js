@@ -247,6 +247,9 @@ var inside_state = {
                     var theoretical_part = remove_shape(this.shape_held, SPLINTERS_LOCS[i]);
                     if (theoretical_part) {
                         this.waiting_shapes.unshift(theoretical_part);
+                        if (combine_shapes(theoretical_part, theoretical_part) == this.shape_held) {
+                            this.waiting_shapes.unshift(theoretical_part);
+                        }
                     }
                 }
                 this.shape_held = null;
@@ -411,6 +414,7 @@ var outside_state = {
     knight_splinters: [KNIGHT, KNIGHT, KNIGHT],
     ogres: [null, null, null],
     ghosts_present: false,
+    acted_during_ghosts: false,
     spawn_statues: ALL_GUARDIANS,
 
     reset: function () {
@@ -429,16 +433,37 @@ var outside_state = {
         this.knight_splinters = [KNIGHT, KNIGHT, KNIGHT];
         this.ogres = [null, null, null];
         this.ghosts_present = false;
+        this.acted_during_ghosts = false;
         this.spawn_statues = random_choose(ALL_GUARDIANS, 6);
     },
 
     kill: function (loc) {
         console.log('kill', loc);
+        if (this.ghosts_present || this.ghost_held != null) {
+            if (this.acted_during_ghosts) {
+                victory_state = END_DEFEAT;
+                end_explanatory_text = "You delayed dealing with the ghosts too long.";
+                return;
+            }
+            else {
+                this.acted_during_ghosts = true;
+            }
+        }
         this.knight_splinters[loc] = SPLINTERS_LOCS[loc];
     },
 
     pickup: function (loc) {
         console.log('pickup', loc);
+        if (this.ghosts_present || this.ghost_held != null) {
+            if (this.acted_during_ghosts) {
+                victory_state = END_DEFEAT;
+                end_explanatory_text = "You delayed dealing with the ghosts too long.";
+                return;
+            }
+            else {
+                this.acted_during_ghosts = true;
+            }
+        }
         var newshape = combine_shapes(this.shape_held, this.knight_splinters[loc]);
         if (newshape) {
             this.shape_held = newshape;
@@ -463,6 +488,16 @@ var outside_state = {
             victory_state = END_DEFEAT;
             end_explanatory_text = "You tried to dissect while there were still the unstop ogres around! Not a good idea.";
             return;
+        }
+        if (this.ghosts_present || this.ghost_held != null) {
+            if (this.acted_during_ghosts) {
+                victory_state = END_DEFEAT;
+                end_explanatory_text = "You delayed dealing with the ghosts too long.";
+                return;
+            }
+            else {
+                this.acted_during_ghosts = true;
+            }
         }
         if (this.count_shapes_invested >= 7) {
             victory_state = END_DEFEAT;
@@ -537,6 +572,11 @@ var outside_state = {
 
     wait: function () {
         console.log('waiting');
+        if (this.ghosts_present) {
+            victory_state = END_DEFEAT;
+            end_explanatory_text = "You tried to leave when there were still ghosts not returned to their statues. Dead players can't leave!";
+            return;
+        }
         if (this.ogres[LEFT] != null || this.ogres[RIGHT] != null) {
             victory_state = END_DEFEAT;
             end_explanatory_text = "You tried to wait for the solo players to exit while the unstop ogres were still rampaging.";
