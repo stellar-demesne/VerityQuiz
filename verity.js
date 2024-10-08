@@ -334,6 +334,7 @@ var inside_state = {
         if (this.witness_ticks >= 6 && !this.ghosts_triggered) {
             this.ghost_time = true;
             this.ghosts_triggered = true;
+            display_phase_announcement();
             // TODO: clear floor of lingering symbols?
         }
     },
@@ -538,6 +539,7 @@ var outside_state = {
             // spawn ghosts
             this.ghosts_present = true;
             this.spawn_statues = random_choose(ALL_GUARDIANS, 6);
+            display_phase_announcement();
         }
     },
 
@@ -716,6 +718,16 @@ function add_starter_callouts_to_chatbox() {
         }
     }
     add_to_chat(chat_text);
+}
+
+function display_phase_announcement() {
+    elem = document.querySelector("#phase-announcement");
+    elem.setAttribute('class', 'phase-announced');
+    // hide after a bit of time.
+    setInterval( function () {
+        elem = document.querySelector("#phase-announcement");
+        elem.removeAttribute('class');
+    }, 2000);
 }
 
 var stock_callouts = [" is at ", " in "];
