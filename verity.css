@@ -110,6 +110,7 @@ body {
     grid-template-columns: 3fr 4fr 3fr;
 }
 #projector-screen-inside {
+    height: 60px;
     grid-column: 2;
     display: grid;
     justify-items: center;
