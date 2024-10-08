@@ -828,8 +828,23 @@ function draw_inside() {
         }
     }
     wall_shapes = wall_shapes.concat(inside_state.inventory.concat(inside_state.waiting_shapes));
+    wall_shapes.sort( function (a, b) {
+        if (a[0] == b[0]) {
+            return 0;
+        }
+        if (a[0] == 'T') {
+            return -1;
+        }
+        if (b[0] == 'T') {
+            return 1;
+        }
+        if (a[0] == 'C') {
+            return -1;
+        }
+        return 1;
+    });
     if (wall_shapes == []) {
-        wall_shapes = "Empty Wall";
+        wall_shapes = "empty-wall";
     }
     // show wall shapes
     elem = document.querySelector("#projector-screen-inside")
