@@ -651,6 +651,7 @@ function continue_current_mode() {
     else {
         outside_state.reset();
     }
+    insert_round_splitter_in_chatbox();
     add_starter_callouts_to_chatbox();
 }
 
@@ -670,6 +671,10 @@ function reset_chatbox() {
     // TODO: make this keep a few lines of any previous callouts
     elem.innerHTML = "--";
     add_starter_callouts_to_chatbox();
+}
+
+function insert_round_splitter_in_chatbox() {
+    add_to_chat("</br>--");
 }
 
 function add_starter_callouts_to_chatbox() {
