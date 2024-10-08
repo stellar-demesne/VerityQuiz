@@ -28,7 +28,7 @@ body {
     grid-column: 2;
 }
 #options-choose-full {
-    min-width: 6.5em;
+    min-width: 6em;
 }
 #options-choose-faststrat {
     grid-column: 2;
