@@ -276,6 +276,17 @@ body {
     border-bottom: solid #c0c0c077;
     z-index:20;
 }
+#phase-announcement {
+    display: none;
+}
+#phase-announcement.phase-announced {
+    display: block;
+    color: white;
+    position: fixed;
+    left: 2%;
+    bottom: 40vh;
+    text-shadow: 0px 0px 3px black, 0px 0px 3px black, 0px 0px 3px black, 0px 0px 3px black, 0px 0px 3px black;
+}
 
 .this-is-a-button {
     color: #334;
