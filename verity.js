@@ -1245,6 +1245,38 @@ function draw_outside() {
 }
 
 function redraw_screen() {
+    if (interleave_modes) {
+        elem = document.querySelector("#options-choose-full");
+        elem.setAttribute('class', 'this-is-a-button enabled-mode');
+        if (current_phase == PHASE_OUTSIDE) {
+            elem = document.querySelector("#options-choose-outside");
+            elem.setAttribute('class', 'this-is-a-button incidental-enabled-mode');
+            elem = document.querySelector("#options-choose-inside");
+            elem.setAttribute('class', 'this-is-a-button');
+        }
+        else {
+            elem = document.querySelector("#options-choose-outside");
+            elem.setAttribute('class', 'this-is-a-button');
+            elem = document.querySelector("#options-choose-inside");
+            elem.setAttribute('class', 'this-is-a-button incidental-enabled-mode');
+        }
+    }
+    else {
+        elem = document.querySelector("#options-choose-full");
+        elem.setAttribute('class', 'this-is-a-button');
+        if (current_phase == PHASE_OUTSIDE) {
+            elem = document.querySelector("#options-choose-outside");
+            elem.setAttribute('class', 'this-is-a-button enabled-mode');
+            elem = document.querySelector("#options-choose-inside");
+            elem.setAttribute('class', 'this-is-a-button');
+        }
+        else {
+            elem = document.querySelector("#options-choose-outside");
+            elem.setAttribute('class', 'this-is-a-button');
+            elem = document.querySelector("#options-choose-inside");
+            elem.setAttribute('class', 'this-is-a-button enabled-mode');
+        }
+    }
     elem = document.querySelector("#sorting");
     fast_strat = elem.checked;
     elem = document.querySelector("#round-end-screen");
