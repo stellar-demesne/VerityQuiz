@@ -104,6 +104,7 @@ var inside_state = {
     shadows: [true, true, true],
     knight_splinters: [KNIGHT, null, KNIGHT],
     ogre: false,
+    yet_sorting: false,
 
     ghost_time: false,
     ghosts_triggered: false,
@@ -132,11 +133,57 @@ var inside_state = {
         this.shadows = [true, true, true];
         this.knight_splinters = [KNIGHT, null, KNIGHT];
         this.ogre = false;
+        if (!fast_strat) {
+            this.yet_sorting = true;
+        }
+        else {
+            this.yet_sorting = false;
+        }
 
         this.ghost_time = false;
         this.ghosts_triggered = false;
         this.statues_circle = random_choose(ALL_GUARDIANS, 6);
         this.guardian_visible = random_choose([GUARDIAN_A, GUARDIAN_B], 1);
+    },
+
+    list_of_all_shapes: function () {
+        var wall_shapes = []
+        if (this.shape_held != null) {
+            if (size_of_shape(this.shape_held) == 1) {
+                wall_shapes.push(this.shape_held)
+            }
+            else {
+                var firstshape;
+                if (remove_shape(this.shape_held, TRIANGLE)) {
+                    firstshape = TRIANGLE;
+                }
+                else if (remove_shape(this.shape_held, SQUARE)) {
+                    firstshape = SQUARE;
+                }
+                else if (remove_shape(this.shape_held, CIRCLE)) {
+                    firstshape = CIRCLE;
+                }
+                wall_shapes.push(firstshape);
+                wall_shapes.push(remove_shape(this.shape_held, firstshape));
+            }
+        }
+        wall_shapes = wall_shapes.concat(this.inventory.concat(this.waiting_shapes));
+        wall_shapes.sort( function (a, b) {
+            if (a[0] == b[0]) {
+                return 0;
+            }
+            if (a[0] == 'T') {
+                return -1;
+            }
+            if (b[0] == 'T') {
+                return 1;
+            }
+            if (a[0] == 'C') {
+                return -1;
+            }
+            return 1;
+        });
+        return wall_shapes;
     },
 
     kill_knight: function (loc) {
@@ -150,8 +197,23 @@ var inside_state = {
             this.knight_splinters[loc] = this.inventory[0];
         }
         else {
-            var chosen_index = random_choose([0, 1], 1);
-            this.knight_splinters[loc] = this.inventory[chosen_index];
+            // if loc is 1: 3.
+            // if loc is 3: 1.
+            // this works.
+            if (this.knight_splinters[2 - loc] == KNIGHT) {
+                // the other knight still lives, we can do the randomness here.
+                var chosen_index = random_choose([0, 1], 1);
+                this.knight_splinters[loc] = this.inventory[chosen_index];
+            }
+            else {
+                // we must do the opposite from the other knight
+                if (this.inventory[0] == this.knight_splinters[2 - loc]) {
+                    this.knight_splinters[loc] = this.inventory[1];
+                }
+                else {
+                    this.knight_splinters[loc] = this.inventory[0];
+                }
+            }
         }
     },
 
@@ -222,23 +284,40 @@ var inside_state = {
                 return;
             }
             else if (size_registered == 1) {
-                // if wrong, then wrong.
-                if (this.shape_held == this.guardian_shapes[loc]) {
-                    // wrong... unless still sorting, IF you are sorting?
-                    victory_state = END_DEFEAT;
-                    end_explanatory_text = "You gave a fellow solo guardian their own symbol. We're not doing sorting, here.";
-                }
-                for (var i = 0; i < this.sent_symbols.length; i++) {
-                    if (this.shape_held == this.sent_symbols[i][0] && loc == this.sent_symbols[i][1]) {
-                        // repeat a send? straight to jail.
+                if (fast_strat || !this.yet_sorting) {
+                    // these symbols are going to their final homes.
+                    if (this.shape_held == this.guardian_shapes[loc]) {
                         victory_state = END_DEFEAT;
-                        end_explanatory_text = "You sent a symbol to a guardian that you had already sent that symbol to.";
+                        end_explanatory_text = "You gave a fellow solo guardian their own symbol. We're not doing sorting, here.";
+                        return;
                     }
+                    for (var i = 0; i < this.sent_symbols.length; i++) {
+                        if (this.shape_held == this.sent_symbols[i][0] && loc == this.sent_symbols[i][1]) {
+                            // repeat a send? straight to jail.
+                            victory_state = END_DEFEAT;
+                            end_explanatory_text = "You sent a symbol to a guardian that you had already sent that symbol to.";
+                            return;
+                        }
+                    }
+
+                }
+                else if (this.yet_sorting) {
+                    // We're doing sorting!
+                    if (this.shape_held != this.guardian_shapes[loc]) {
+                        victory_state = END_DEFEAT;
+                        end_explanatory_text = "You sent a symbol to the wrong guardian while sorting is still happening.";
+                        return;
+                    }
+                    // that's all the checks, actually. huh.
                 }
                 // transfer the one splinter
-                this.sent_symbols.push([this.shape_held, loc]);
+                if (!this.yet_sorting) {
+                    // if we're still sorting, then shadows aren't disappearing, and the witness thus (TODO: maybe?) won't take notice?
+                    // and we also don't need to track what we've sent, actually.
+                    this.sent_symbols.push([this.shape_held, loc]);
+                    this.witness_ticks += 1;
+                }
                 this.shape_held = null;
-                this.witness_ticks += 1;
             }
             else if (size_registered == 2) {
                 // TODO: fail if we do this? fail if we do this too many times?
@@ -255,77 +334,100 @@ var inside_state = {
                 this.shape_held = null;
             }
         }
+
+        // #################### END - GIVING - PORTION
+        // #################### START - RECIEVING - PORTION
+
         // check how many we recieve!
-        var shadowcount = this.shadows[LEFT] + this.shadows[CENTRE] + this.shadows[RIGHT]
-        if (shadowcount == 3 && this.doubles) {
-            if (this.sent_symbols.length == 1) {
-                // we *can* recieve both, immediately
-                if (random_choose([false, true], 1)) {
-                    //send from the one
-                    if (this.guardian_shapes[this.position] == CIRCLE) {
-                        this.waiting_shapes.push(SQUARE);
-                        this.shadows[this.guardian_shapes.indexOf(SQUARE)] = false;
+        if (this.yet_sorting) {
+            // first, if we're still sorting, then we just recieve any needed of our own type.
+            var desired_shape_count = 0;
+            var wall_shapes = this.list_of_all_shapes();
+            for (var i = 0; i < wall_shapes.length; i++) {
+                if (wall_shapes[i] == this.guardian_shapes[this.position]) {
+                    desired_shape_count += 1;
+                }
+            }
+            if (desired_shape_count < 2) {
+                this.waiting_shapes.push(this.guardian_shapes[this.position]);
+            }
+        }
+        else {
+            // otherwise, we do the full figuring
+            var shadowcount = this.shadows[LEFT] + this.shadows[CENTRE] + this.shadows[RIGHT]
+            if (shadowcount == 3 && this.doubles) {
+                if (this.sent_symbols.length == 1) {
+                    // we *can* recieve both, immediately
+                    if (random_choose([false, true], 1)) {
+                        //send from the one
+                        if (this.guardian_shapes[this.position] == CIRCLE) {
+                            this.waiting_shapes.push(SQUARE);
+                            this.shadows[this.guardian_shapes.indexOf(SQUARE)] = false;
+                        }
+                        else {
+                            this.waiting_shapes.push(CIRCLE);
+                            this.shadows[this.guardian_shapes.indexOf(CIRCLE)] = false;
+                        }
                     }
-                    else {
-                        this.waiting_shapes.push(CIRCLE);
+                    this.witness_ticks += 1;
+                    if (random_choose([false, true], 1)) {
+                        //send from the other
+                        if (this.guardian_shapes[this.position] == TRIANGLE) {
+                            // we must be wanting LEFT and RIGHT
+                            this.waiting_shapes.push(SQUARE);
+                            this.shadows[this.guardian_shapes.indexOf(SQUARE)] = false;
+                        }
+                        else {
+                            // LEFT + CENTRE or CENTRE + RIGHT, don't care here.
+                            this.waiting_shapes.push(TRIANGLE);
+                            this.shadows[this.guardian_shapes.indexOf(TRIANGLE)] = false;
+                        }
+                    }
+                    this.witness_ticks += 1;
+                }
+                else { // we've sent more than 1 symbol.
+                    // we MUST recieve both, *now*.
+                    if (this.guardian_shapes[this.position] != CIRCLE) {
                         this.shadows[this.guardian_shapes.indexOf(CIRCLE)] = false;
+                        this.witness_ticks += 1;
+                        this.waiting_shapes.push(CIRCLE);
                     }
-                }
-                this.witness_ticks += 1;
-                if (random_choose([false, true], 1)) {
-                    //send from the other
-                    if (this.guardian_shapes[this.position] == TRIANGLE) {
-                        // we must be wanting LEFT and RIGHT
-                        this.waiting_shapes.push(SQUARE);
-                        this.shadows[this.guardian_shapes.indexOf(SQUARE)] = false;
-                    }
-                    else {
-                        // LEFT + CENTRE or CENTRE + RIGHT, don't care here.
-                        this.waiting_shapes.push(TRIANGLE);
+                    if (this.guardian_shapes[this.position] != TRIANGLE) {
                         this.shadows[this.guardian_shapes.indexOf(TRIANGLE)] = false;
+                        this.witness_ticks += 1;
+                        this.waiting_shapes.push(TRIANGLE);
+                    }
+                    if (this.guardian_shapes[this.position] != SQUARE) {
+                        this.shadows[this.guardian_shapes.indexOf(SQUARE)] = false;
+                        this.witness_ticks += 1;
+                        this.waiting_shapes.push(SQUARE);
                     }
                 }
+            }
+            else if (this.sent_symbols.length == 2 && shadowcount == 1) {
+                // did send already
+                this.witness_ticks += 2;
+            }
+            else if (shadowcount > 1) {
+                // the one room has shadowcount-1 symbols left to hand over
+                var potential_shapes = [];
+                for (var i = LEFT; i <= RIGHT; i++) {
+                    if (i != this.position && this.shadows[i]) {
+                        potential_shapes.push(this.guardian_shapes[i]);
+                    }
+                }
+                // hand over one of them.
+                var chosen_shape = random_choose(potential_shapes, 1);
+                this.waiting_shapes.push(chosen_shape);
+                this.shadows[this.guardian_shapes.indexOf(chosen_shape)] = false;
+                this.witness_ticks += 1;
+                // the third solo is also handing along shapes
                 this.witness_ticks += 1;
             }
-            else { // we've sent more than 1 symbol.
-                // we MUST recieve both, *now*.
-                if (this.guardian_shapes[this.position] != CIRCLE) {
-                    this.shadows[this.guardian_shapes.indexOf(CIRCLE)] = false;
-                    this.witness_ticks += 1;
-                    this.waiting_shapes.push(CIRCLE);
-                }
-                if (this.guardian_shapes[this.position] != TRIANGLE) {
-                    this.shadows[this.guardian_shapes.indexOf(TRIANGLE)] = false;
-                    this.witness_ticks += 1;
-                    this.waiting_shapes.push(TRIANGLE);
-                }
-                if (this.guardian_shapes[this.position] != SQUARE) {
-                    this.shadows[this.guardian_shapes.indexOf(SQUARE)] = false;
-                    this.witness_ticks += 1;
-                    this.waiting_shapes.push(SQUARE);
-                }
-            }
         }
-        else if (this.sent_symbols.length == 2 && shadowcount == 1) {
-            // did send already
-            this.witness_ticks += 2;
-        }
-        else if (shadowcount > 1) {
-            // the one room has shadowcount-1 symbols left to hand over
-            var potential_shapes = [];
-            for (var i = LEFT; i <= RIGHT; i++) {
-                if (i != this.position && this.shadows[i]) {
-                    potential_shapes.push(this.guardian_shapes[i]);
-                }
-            }
-            // hand over one of them.
-            var chosen_shape = random_choose(potential_shapes, 1);
-            this.waiting_shapes.push(chosen_shape);
-            this.shadows[this.guardian_shapes.indexOf(chosen_shape)] = false;
-            this.witness_ticks += 1;
-            // the third solo is also handing along shapes
-            this.witness_ticks += 1;
-        }
+
+        // #################### END - POSTSORT - PORTION
+
         if (this.inventory.length == 0 && this.waiting_shapes.length != 0) {
             this.ogre = true;
         }
@@ -339,7 +441,34 @@ var inside_state = {
         }
     },
 
-    ghost_callout(num) {
+    wait_for_sort: function () {
+        var wall_shapes = this.list_of_all_shapes();
+        var insufficiently_generous = false;
+        if (wall_shapes.length > 2) {
+            // nu-uh.
+            insufficiently_generous = true;
+        }
+        for (var i = 0; i < wall_shapes.length; i++) {
+            if (wall_shapes[i] != this.guardian_shapes[this.position]) {
+                insufficiently_generous = true;
+            }
+        }
+        if (insufficiently_generous) {
+            victory_state = END_DEFEAT;
+            end_explanatory_text = "You tried to wait for others to have finished sorting when you've still got symbols to give away.";
+            return;
+        }
+        // we've been generous enough! so now we recieve any yet-missing shapes.
+        for (var i = wall_shapes.length; i < 2; i++) {
+            this.waiting_shapes.push(this.guardian_shapes[this.position]);
+        }
+        // and now that things are sorted, we act like we started with doubles.
+        this.doubles = true;
+        this.yet_sorting = false;
+        add_to_chat(`</br>"Sorted - now, split!"`)
+    },
+
+    ghost_callout: function (num) {
         if (this.ghost_time == false) {
             // we uh. can't see that yet. ignore this click.
             return;
@@ -601,6 +730,7 @@ var PHASE_OUTSIDE = "OUTSIDE";
 var current_phase = PHASE_OUTSIDE;
 
 var interleave_modes = false;
+var fast_strat = true;
 
 var wins = 0;
 var losses = 0;
@@ -692,12 +822,14 @@ function add_starter_callouts_to_chatbox() {
                 chat_text += 'c';
             }
         }
-        chat_text += "</br>"
-        if (inside_state.doubles) {
-            chat_text += '"Doubles!"';
-        }
-        else {
-            chat_text += '"No doubles."';
+        if (fast_strat) {
+            chat_text += "</br>"
+            if (inside_state.doubles) {
+                chat_text += '"Doubles!"';
+            }
+            else {
+                chat_text += '"No doubles."';
+            }
         }
     }
     else {
@@ -805,46 +937,19 @@ function draw_inside() {
     elem.setAttribute('style', "display: none");
     elem = document.querySelector("#inside-view");
     elem.setAttribute('style', "display: block");
+
+    elem = document.querySelector("#wait-for-sort");
+    if (fast_strat) {
+        elem.setAttribute('style', "display: none");
+    }
+    else {
+        elem.setAttribute('style', "display: block");
+    }
     
     // decides shapes for wall
-    var wall_shapes = []
-    if (inside_state.shape_held != null) {
-        if (size_of_shape(inside_state.shape_held) == 1) {
-            wall_shapes.push(inside_state.shape_held)
-        }
-        else {
-            var firstshape;
-            if (remove_shape(inside_state.shape_held, TRIANGLE)) {
-                firstshape = TRIANGLE;
-            }
-            else if (remove_shape(inside_state.shape_held, SQUARE)) {
-                firstshape = SQUARE;
-            }
-            else if (remove_shape(inside_state.shape_held, CIRCLE)) {
-                firstshape = CIRCLE;
-            }
-            wall_shapes.push(firstshape);
-            wall_shapes.push(remove_shape(inside_state.shape_held, firstshape));
-        }
-    }
-    wall_shapes = wall_shapes.concat(inside_state.inventory.concat(inside_state.waiting_shapes));
-    wall_shapes.sort( function (a, b) {
-        if (a[0] == b[0]) {
-            return 0;
-        }
-        if (a[0] == 'T') {
-            return -1;
-        }
-        if (b[0] == 'T') {
-            return 1;
-        }
-        if (a[0] == 'C') {
-            return -1;
-        }
-        return 1;
-    });
+    var wall_shapes = inside_state.list_of_all_shapes();
     if (wall_shapes == []) {
-        wall_shapes = "empty-wall";
+        wall_shapes = ["empty-wall"];
     }
     // show wall shapes
     elem = document.querySelector("#projector-screen-inside")
@@ -1140,6 +1245,8 @@ function draw_outside() {
 }
 
 function redraw_screen() {
+    elem = document.querySelector("#sorting");
+    fast_strat = elem.checked;
     elem = document.querySelector("#round-end-screen");
     if (victory_state && !victory_seen) {
         elem.showModal();
@@ -1181,6 +1288,8 @@ elem = document.querySelector("#options-choose-outside");
 elem.setAttribute('onclick', "choose_one_only(PHASE_OUTSIDE)");
 elem = document.querySelector("#options-choose-full");
 elem.setAttribute('onclick', "choose_full_encounter()");
+elem = document.querySelector("#sorting");
+elem.setAttribute('onclick', "reset_scores(); continue_current_mode(); redraw_screen();");
 
 elem = document.querySelector("#score-reset");
 elem.setAttribute('onclick', "reset_scores()");
@@ -1223,6 +1332,8 @@ elem.setAttribute('onclick', "inside_state.ghost_callout(5)");
 
 elem = document.querySelector("#leave");
 elem.setAttribute('onclick', "inside_state.leave()");
+elem = document.querySelector("#wait-for-sort");
+elem.setAttribute('onclick', "inside_state.wait_for_sort()");
 
 
 elem = document.querySelector("#knight-outside-left .knight");
