@@ -247,7 +247,7 @@ body {
 #inside-statue-6, #outside-statue-6 {
     margin-left: -30px;
 }
-#wait, #leave {
+#wait, #leave, #wait-for-sort {
     position: absolute;
     top: 490px;
     left: max(410px, 50vw);
@@ -256,6 +256,10 @@ body {
 }
 #wait {
     top: 800px;
+}
+#wait-for-sort {
+    top: 160px;
+    margin-left: -4em;
 }
 
 #buffs {
