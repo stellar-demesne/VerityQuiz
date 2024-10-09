@@ -306,6 +306,12 @@ body {
     padding: 3px 9px;
     user-select: none;
 }
+.enabled-mode {
+    background-image: radial-gradient( #6d6 20%, #ddd 90%);
+}
+.incidental-enabled-mode {
+    background-image: radial-gradient( #8dd 0%, #ddd 90%);
+}
 
 .knight {
     background-image: url("./page_images/Verity_knight.svg");
