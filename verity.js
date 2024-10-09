@@ -1321,7 +1321,7 @@ elem.setAttribute('onclick', "choose_one_only(PHASE_OUTSIDE)");
 elem = document.querySelector("#options-choose-full");
 elem.setAttribute('onclick', "choose_full_encounter()");
 elem = document.querySelector("#sorting");
-elem.setAttribute('onclick', "continue_current_mode(); reset_scores();");
+elem.setAttribute('onclick', "if (current_phase == PHASE_INSIDE || interleave_modes) { continue_current_mode(); reset_scores(); }; redraw_screen();");
 
 elem = document.querySelector("#score-reset");
 elem.setAttribute('onclick', "continue_current_mode(); reset_scores();");

@@ -25,6 +25,9 @@ body {
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
 }
 
+#options-choose-tutorial, #options-choose-training {
+    color: #667;
+}
 #options-choose-inside {
     grid-column: 2;
 }
@@ -293,6 +296,25 @@ body {
     left: 2%;
     bottom: 40vh;
     text-shadow: 0px 0px 3px black, 0px 0px 3px black, 0px 0px 3px black, 0px 0px 3px black, 0px 0px 3px black;
+}
+
+#tutorial-pane {
+    display: none;
+}
+#tutorial-pane.active {
+    display: block;
+    text-align: bottom left;
+    backdrop-filter: blur(15px);
+    background-color: #d2d2d277;
+    position: fixed;
+    right: 0;
+    top: max(5vh, 45px);
+    height: 35vh;
+    width: 15em;
+    padding-left: 5px;
+    border-top: solid #c0c0c077;
+    border-bottom: solid #c0c0c077;
+    z-index:20;
 }
 
 .this-is-a-button {
