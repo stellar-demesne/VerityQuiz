@@ -1321,10 +1321,10 @@ elem.setAttribute('onclick', "choose_one_only(PHASE_OUTSIDE)");
 elem = document.querySelector("#options-choose-full");
 elem.setAttribute('onclick', "choose_full_encounter()");
 elem = document.querySelector("#sorting");
-elem.setAttribute('onclick', "reset_scores(); continue_current_mode(); redraw_screen();");
+elem.setAttribute('onclick', "continue_current_mode(); reset_scores();");
 
 elem = document.querySelector("#score-reset");
-elem.setAttribute('onclick', "reset_scores()");
+elem.setAttribute('onclick', "continue_current_mode(); reset_scores();");
 
 elem = document.querySelector("#round-end-screen");
 elem.setAttribute('onclose', "continue_current_mode(); redraw_screen();");
