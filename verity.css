@@ -16,6 +16,7 @@ body {
 #meta-area {
     color: #eee;
     margin-bottom: 5px;
+    min-width: 820px;
 }
 
 #options-area {
@@ -146,6 +147,7 @@ body {
     margin: 50px;
     margin-top: 30px;
     margin-bottom: 0px;
+    width: 65px;
 }
 #ogre-outside-right {
     grid-column: 6;
@@ -306,7 +308,8 @@ body {
     background-repeat: no-repeat;
     background-size: contain;
     height: 100px;
-    width: 100px;
+    width: 60px;
+    margin-left: -10px;
 }
 
 .ogre {
