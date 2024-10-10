@@ -441,18 +441,23 @@ var inside_state = {
         }
     },
 
-    wait_for_sort: function () {
+    possess_another_shape: function () {
         var wall_shapes = this.list_of_all_shapes();
-        var insufficiently_generous = false;
         if (wall_shapes.length > 2) {
             // nu-uh.
-            insufficiently_generous = true;
+            return true;
         }
         for (var i = 0; i < wall_shapes.length; i++) {
             if (wall_shapes[i] != this.guardian_shapes[this.position]) {
-                insufficiently_generous = true;
+                return true;
             }
         }
+        return false;
+    },
+
+    wait_for_sort: function () {
+        var wall_shapes = this.list_of_all_shapes();
+        var insufficiently_generous = this.possess_another_shape();
         if (insufficiently_generous) {
             victory_state = END_DEFEAT;
             end_explanatory_text = "You tried to wait for others to have finished sorting when you've still got symbols to give away.";
@@ -1334,7 +1339,7 @@ function show_training() {
         elem.setAttribute('class', 'active');
         if (current_phase == PHASE_OUTSIDE) {
             elem = document.querySelector("#outside-steps");
-            elem.setAttribute('style', 'display: enable');
+            elem.setAttribute('style', 'display: block');
             elem = document.querySelector("#inside-steps");
             elem.setAttribute('style', 'display: none');
             // outside knight-time?
@@ -1377,18 +1382,77 @@ function show_training() {
             elem = document.querySelector("#outside-steps");
             elem.setAttribute('style', 'display: none');
             elem = document.querySelector("#inside-steps");
-            elem.setAttribute('style', 'display: enable');
+            elem.setAttribute('style', 'display: block');
             if (fast_strat) {
                 elem = document.querySelector("#inside-steps-faststrat");
-                elem.setAttribute('style', 'display: enable');
+                elem.setAttribute('style', 'display: block');
                 elem = document.querySelector("#inside-steps-slowstrat");
                 elem.setAttribute('style', 'display: none');
             }
-            else {
+            else { // slow-strat
                 elem = document.querySelector("#inside-steps-faststrat");
                 elem.setAttribute('style', 'display: none');
                 elem = document.querySelector("#inside-steps-slowstrat");
-                elem.setAttribute('style', 'display: enable');
+                elem.setAttribute('style', 'display: block');
+                var stuff_to_sort = inside_state.yet_sorting && inside_state.possess_another_shape();
+                var my_shape = inside_state.guardian_shapes[inside_state.position]
+                var knight_or_mine = [KNIGHT, my_shape];
+                var all_shapes = inside_state.list_of_all_shapes();
+                // knight?
+                elem = document.querySelector("#inside-slow-step-knight");
+                // if we are sorting and can't see a splinter to hand away
+                // OR
+                // if we have sorted and can't see a splinter to split away
+                // OR
+                // if we have sorted and split and there is a knight alive.
+                var stuff_to_sort_that_isnt_on_ground = stuff_to_sort
+                                           && knight_or_mine.includes(inside_state.knight_splinters[LEFT])
+                                           && knight_or_mine.includes(inside_state.knight_splinters[RIGHT]);
+                var stuff_to_split_that_isnt_on_ground = !inside_state.yet_sorting
+                                               && inside_state.held_shape == null
+                                               && all_shapes.includes(my_shape)
+                                               && inside_state.knight_splinters[LEFT] != my_shape
+                                               && inside_state.knight_splinters[RIGHT] != my_shape;
+                var stuff_to_exit_that_isnt_on_ground = !inside_state.yet_sorting
+                                               && !all_shapes.includes(my_shape)
+                                               && inside_state.knight_splinters.includes(KNIGHT);
+                query_boolean = (stuff_to_sort_that_isnt_on_ground
+                              || stuff_to_split_that_isnt_on_ground
+                              || stuff_to_exit_that_isnt_on_ground
+                                );
+                is_tutorial_step_active(elem, query_boolean);
+                // sorting splinter?
+                elem = document.querySelector("#inside-slow-step-splinter");
+                query_boolean = inside_state.shape_held == null &&
+                               (!knight_or_mine.includes(inside_state.knight_splinters[LEFT]) ||
+                                !knight_or_mine.includes(inside_state.knight_splinters[RIGHT]) );
+                is_tutorial_step_active(elem, query_boolean && stuff_to_sort);
+                // sorting register?
+                elem = document.querySelector("#inside-slow-step-register");
+                query_boolean = inside_state.yet_sorting
+                             && inside_state.shape_held != my_shape
+                             && inside_state.shape_held != null
+                             && SPLINTERS_LOCS.includes(inside_state.shape_held);
+                is_tutorial_step_active(elem, query_boolean);
+                // call for sort?
+                elem = document.querySelector("#inside-slow-step-call-for-split");
+                query_boolean = inside_state.yet_sorting && all_shapes.every( (x) => (x == my_shape) );
+                is_tutorial_step_active(elem, query_boolean);
+                // splitting?
+                elem = document.querySelector("#inside-slow-step-split");
+                query_boolean = !inside_state.yet_sorting &&
+                                (inside_state.shape_held == my_shape ||
+                                 inside_state.knight_splinters[LEFT] == my_shape ||
+                                 inside_state.knight_splinters[RIGHT] == my_shape);
+                is_tutorial_step_active(elem, query_boolean);
+                // noticed?
+                elem = document.querySelector("#inside-slow-step-announce");
+                query_boolean = inside_state.ghost_time;
+                is_tutorial_step_active(elem, query_boolean);
+                // statue-calling?
+                elem = document.querySelector("#inside-slow-step-exit");
+                query_boolean = !inside_state.ghost_time && !all_shapes.includes(my_shape);
+                is_tutorial_step_active(elem, query_boolean);
             }
         }
     }
