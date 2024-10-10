@@ -216,7 +216,51 @@
         </div>
         <div id="phase-announcement">The Witness notices your efforts...</div>
     </div>
-    <div id="tutorial-pane"></div>
+    <div id="tutorial-panes">
+        <div id="outside-steps">
+            <span id="outside-step-knight" class="tutorial-step">-</span> Kill knight<br>
+            <span id="outside-step-splinter" class="tutorial-step">-</span> Pick up Splinter<br>
+            <span id="outside-step-dissect" class="tutorial-step">-</span> Dissect from a statue which has that Splinter but shouldn't<br>
+            <span class="small-tip">(repeat as needed)</span><br>
+            <br>
+            But also:<br>
+            <span id="outside-step-ogres" class="tutorial-step">-</span> Kill Ogres <strong>Immediately</strong><br>
+            <br>
+            And also:<br>
+            <span id="outside-step-ghost-grab" class="tutorial-step">-</span> Pick up ghosts from the ground<br>
+            <span id="outside-step-ghost-deposit" class="tutorial-step">-</span> Place them in the matching statue (reference callouts)<br>
+            <br>
+            <span id="end-of-encounter"><span class="tutorial-step">&gt;</span> When all statues have none of the callout shapes, then Wait</span>
+        </div>
+        <div id="inside-steps">
+            <div id="inside-steps-faststrat">
+                <span id="inside-fast-step-knight" class="tutorial-step">-</span> Kill knights to drop Splinters<br>
+                <span class="small-tip">(kill Ogre to respawn knights)</span><br>
+                <br>
+                <span id="inside-fast-step-splinter" class="tutorial-step">-</span> Pick up Splinter<br>
+                <span id="inside-fast-step-register" class="tutorial-step">-</span> Register Splinter to room which needs that symbol<br>
+                <span class="small-tip">(do for both your original splinters. Send to same room only if no doubles)</span><br>
+                <span id="inside-fast-step-announce" class="tutorial-step">-</span> When Noticed, announce the lit up guardian you see<br>
+                <span id="inside-fast-step-exit" class="tutorial-step">-</span> Grab both Splinters without Registering.<br>
+                <br>
+                <span id="end-of-encounter"><span class="tutorial-step">&gt;</span> When shadowless and holding two Splinters, Leave through the glass</span>
+            </div>
+            <div id="inside-steps-slowstrat">
+                <span id="inside-fast-step-knight" class="tutorial-step">-</span> Kill knights to drop Splinters<br>
+                <span class="small-tip">(kill Ogre to respawn knights)</span><br>
+                <br>
+                <span id="inside-fast-step-splinter" class="tutorial-step">-</span> Pick up other room's Splinter<br>
+                <span id="inside-fast-step-register" class="tutorial-step">-</span> Register Splinter to its room<br>
+                <span id="inside-fast-step-call-for-split" class="tutorial-step">-</span> Call/wait for splitting<br>
+                <br>
+                <span id="inside-fast-step-splinter" class="tutorial-step">-</span> Pick up and Register one Splinter to each other room<br>
+                <span id="inside-fast-step-announce" class="tutorial-step">-</span> When Noticed, announce the lit up guardian you see<br>
+                <span id="inside-fast-step-exit" class="tutorial-step">-</span> Pick up both Splinters<br>
+                <br>
+                <span id="end-of-encounter"><span class="tutorial-step">&gt;</span> When shadowless and holding two Splinters, Leave through the glass</span>
+            </div>
+        </div>
+    </div>
 </div>
 <script type="text/javascript" src="verity.js"> </script>
 </body>

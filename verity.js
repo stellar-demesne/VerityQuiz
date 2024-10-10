@@ -732,6 +732,8 @@ var current_phase = PHASE_OUTSIDE;
 var interleave_modes = false;
 var fast_strat = true;
 
+var training_active = false;
+
 var wins = 0;
 var losses = 0;
 var winstreak = 0;
@@ -1277,8 +1279,7 @@ function redraw_screen() {
             elem.setAttribute('class', 'this-is-a-button enabled-mode');
         }
     }
-    elem = document.querySelector("#sorting");
-    fast_strat = elem.checked;
+    show_training();
     elem = document.querySelector("#round-end-screen");
     if (victory_state && !victory_seen) {
         elem.showModal();
@@ -1313,6 +1314,44 @@ function hide_round_end() {
     elem.close();
 }
 
+function show_training() {
+    if (training_active) {
+        elem = document.querySelector("#options-choose-training");
+        elem.setAttribute('class', 'this-is-a-button incidental-enabled-mode');
+        elem = document.querySelector("#tutorial-panes");
+        elem.setAttribute('class', 'active');
+        if (current_phase == PHASE_OUTSIDE) {
+            elem = document.querySelector("#outside-steps");
+            elem.setAttribute('style', 'display: enable');
+            elem = document.querySelector("#inside-steps");
+            elem.setAttribute('style', 'display: none');
+        }
+        else {
+            elem = document.querySelector("#outside-steps");
+            elem.setAttribute('style', 'display: none');
+            elem = document.querySelector("#inside-steps");
+            elem.setAttribute('style', 'display: enable');
+            if (fast_strat) {
+                elem = document.querySelector("#inside-steps-faststrat");
+                elem.setAttribute('style', 'display: enable');
+                elem = document.querySelector("#inside-steps-slowstrat");
+                elem.setAttribute('style', 'display: none');
+            }
+            else {
+                elem = document.querySelector("#inside-steps-faststrat");
+                elem.setAttribute('style', 'display: none');
+                elem = document.querySelector("#inside-steps-slowstrat");
+                elem.setAttribute('style', 'display: enable');
+            }
+        }
+    }
+    else {
+        elem = document.querySelector("#options-choose-training");
+        elem.setAttribute('class', 'this-is-a-button');
+        elem = document.querySelector("#tutorial-panes");
+        elem.removeAttribute('class');
+    }
+}
 
 elem = document.querySelector("#options-choose-inside");
 elem.setAttribute('onclick', "choose_one_only(PHASE_INSIDE)");
@@ -1321,10 +1360,25 @@ elem.setAttribute('onclick', "choose_one_only(PHASE_OUTSIDE)");
 elem = document.querySelector("#options-choose-full");
 elem.setAttribute('onclick', "choose_full_encounter()");
 elem = document.querySelector("#sorting");
-elem.setAttribute('onclick', "if (current_phase == PHASE_INSIDE || interleave_modes) { continue_current_mode(); reset_scores(); }; redraw_screen();");
+elem.setAttribute('onclick', "switch_inside_strat()");
+
+function switch_inside_strat() {
+    elem = document.querySelector("#sorting");
+    fast_strat = elem.checked;
+    if (current_phase == PHASE_INSIDE || interleave_modes) {
+        continue_current_mode();
+        reset_scores();
+    }
+    redraw_screen();
+}
 
 elem = document.querySelector("#score-reset");
 elem.setAttribute('onclick', "continue_current_mode(); reset_scores();");
+
+elem = document.querySelector("#options-choose-tutorial");
+elem.setAttribute('onclick', "start_tutorial()");
+elem = document.querySelector("#options-choose-training");
+elem.setAttribute('onclick', "training_active = !training_active; redraw_screen();");
 
 elem = document.querySelector("#round-end-screen");
 elem.setAttribute('onclose', "continue_current_mode(); redraw_screen();");

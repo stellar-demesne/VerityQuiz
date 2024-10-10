@@ -278,10 +278,11 @@ body {
     background-color: #d2d2d233;
     position: fixed;
     right: 0;
-    bottom: 33vh;
+    top: max(420px, 53vh);
     width: 15em;
     height: 8em;
     padding-left: 5px;
+    padding-top: 5px;
     border-top: solid #c0c0c077;
     border-bottom: solid #c0c0c077;
     z-index:20;
@@ -298,23 +299,39 @@ body {
     text-shadow: 0px 0px 3px black, 0px 0px 3px black, 0px 0px 3px black, 0px 0px 3px black, 0px 0px 3px black;
 }
 
-#tutorial-pane {
+#tutorial-panes {
     display: none;
 }
-#tutorial-pane.active {
+#tutorial-panes.active {
     display: block;
-    text-align: bottom left;
     backdrop-filter: blur(15px);
-    background-color: #d2d2d277;
+    background-color: #d2d2d299;
     position: fixed;
     right: 0;
     top: max(5vh, 45px);
-    height: 35vh;
     width: 15em;
     padding-left: 5px;
+    padding-top: 5px;
+    padding-bottom: 10px;
     border-top: solid #c0c0c077;
     border-bottom: solid #c0c0c077;
     z-index:20;
+}
+.tutorial-step {
+    font-family: monospace;
+    font-size: large;
+}
+.current-tutorial-step {
+    color: #484;
+    font-weight: bold;
+    text-shadow: 0px 0px 3px #4f4, 0px 0px 3px #4f4, 0px 0px 15px #4a4;
+}
+.small-tip {
+    font-size: smaller;
+    font-style: italic;
+}
+#end-of-encounter {
+    text-shadow: 0px 0px 30px #4d4;
 }
 
 .this-is-a-button {
