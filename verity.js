@@ -1314,8 +1314,20 @@ function hide_round_end() {
     elem.close();
 }
 
+function is_tutorial_step_active(inherited_elem, inherited_query, activation_character="&gt;") {
+    if (inherited_query) {
+        elem.setAttribute("class", "tutorial-step current-tutorial-step");
+        elem.innerHTML = activation_character;
+    }
+    else {
+        elem.setAttribute("class", "tutorial-step");
+        elem.innerHTML = "-"
+    }
+}
+
 function show_training() {
     if (training_active) {
+        var query_boolean;
         elem = document.querySelector("#options-choose-training");
         elem.setAttribute('class', 'this-is-a-button incidental-enabled-mode');
         elem = document.querySelector("#tutorial-panes");
@@ -1325,6 +1337,41 @@ function show_training() {
             elem.setAttribute('style', 'display: enable');
             elem = document.querySelector("#inside-steps");
             elem.setAttribute('style', 'display: none');
+            // outside knight-time?
+            elem = document.querySelector("#outside-step-knight");
+            query_boolean = !outside_state.knight_splinters.includes(CIRCLE)
+                         && !outside_state.knight_splinters.includes(TRIANGLE)
+                         && !outside_state.knight_splinters.includes(SQUARE)
+                         && outside_state.shape_held == null;
+            is_tutorial_step_active(elem, query_boolean, "?");
+            // outside splinter-time?
+            elem = document.querySelector("#outside-step-splinter");
+            query_boolean = ( outside_state.knight_splinters.includes(CIRCLE)
+                           || outside_state.knight_splinters.includes(TRIANGLE)
+                           || outside_state.knight_splinters.includes(SQUARE)
+                         ) && outside_state.shape_held == null;
+            is_tutorial_step_active(elem, query_boolean);
+            // outside dissecting-time?
+            elem = document.querySelector("#outside-step-dissect");
+            query_boolean = false;
+            for (var i = LEFT; i <= RIGHT; i++) {
+                query_boolean |= (outside_state.shapes[i] != combine_shapes(outside_state.inside_callout[(i+1) % 3], outside_state.inside_callout[(i+2) % 3]))
+            }
+            query_boolean = outside_state.shape_held != null && query_boolean;
+            is_tutorial_step_active(elem, query_boolean);
+            // outside ogres?
+            elem = document.querySelector("#outside-step-ogres");
+            query_boolean = outside_state.ogres[LEFT] != null || outside_state.ogres[RIGHT] != null
+            is_tutorial_step_active(elem, query_boolean);
+            // outside ghosts
+            // grabbing?
+            elem = document.querySelector("#outside-step-ghost-grab");
+            query_boolean = outside_state.ghosts_present;
+            is_tutorial_step_active(elem, query_boolean);
+            // dropping?
+            elem = document.querySelector("#outside-step-ghost-deposit");
+            query_boolean = outside_state.ghost_held;
+            is_tutorial_step_active(elem, query_boolean);
         }
         else {
             elem = document.querySelector("#outside-steps");
