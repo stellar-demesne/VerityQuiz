@@ -1388,6 +1388,34 @@ function show_training() {
                 elem.setAttribute('style', 'display: block');
                 elem = document.querySelector("#inside-steps-slowstrat");
                 elem.setAttribute('style', 'display: none');
+                var shadowcount = (inside_state.shadows[LEFT] + inside_state.shadows[CENTRE] + inside_state.shadows[RIGHT]);
+                var knight_present = inside_state.knight_splinters.every((x) => {return (!x || x == KNIGHT)});
+                var splinter_present = !inside_state.ogre && !inside_state.knight_splinters.every((x) => {return (!x || x == KNIGHT)});
+                // time to kill knight?
+                elem = document.querySelector("#inside-fast-step-knight");
+                query_boolean = ((inside_state.shape_held == null    || shadowcount == 1)
+                              && (knight_present                     || inside_state.ogre)
+                              && (inside_state.inventory.length != 0 || inside_state.waiting_shapes.length != 0)
+                             && !inside_state.ghost_time);
+                is_tutorial_step_active(elem, query_boolean);
+                // time to pick up a splinter?
+                elem = document.querySelector("#inside-fast-step-splinter");
+                query_boolean = splinter_present;
+                is_tutorial_step_active(elem, query_boolean);
+                // got a splinter to register?
+                elem = document.querySelector("#inside-fast-step-register");
+                query_boolean = inside_state.sent_symbols.length < 2 && inside_state.shape_held != null;
+                is_tutorial_step_active(elem, query_boolean);
+                // time to announce?
+                elem = document.querySelector("#inside-fast-step-announce");
+                query_boolean = inside_state.ghost_time;
+                is_tutorial_step_active(elem, query_boolean);
+                // time to leave?
+                elem = document.querySelector("#inside-fast-step-exit");
+                query_boolean = !inside_state.ghost_time
+                             && shadowcount == 1
+                             && (inside_state.inventory.length != 0 || inside_state.waiting_shapes.length != 0);
+                is_tutorial_step_active(elem, query_boolean);
             }
             else { // slow-strat
                 elem = document.querySelector("#inside-steps-faststrat");
@@ -1415,7 +1443,8 @@ function show_training() {
                                                && inside_state.knight_splinters[RIGHT] != my_shape;
                 var stuff_to_exit_that_isnt_on_ground = !inside_state.yet_sorting
                                                && !all_shapes.includes(my_shape)
-                                               && inside_state.knight_splinters.includes(KNIGHT);
+                                               && (inside_state.knight_splinters.includes(KNIGHT)
+                                                || inside_state.ogre);
                 query_boolean = (stuff_to_sort_that_isnt_on_ground
                               || stuff_to_split_that_isnt_on_ground
                               || stuff_to_exit_that_isnt_on_ground
@@ -1489,7 +1518,15 @@ elem.setAttribute('onclick', "continue_current_mode(); reset_scores();");
 elem = document.querySelector("#options-choose-tutorial");
 elem.setAttribute('onclick', "start_tutorial()");
 elem = document.querySelector("#options-choose-training");
-elem.setAttribute('onclick', "training_active = !training_active; redraw_screen();");
+elem.setAttribute('onclick', "activate_training()");
+
+function activate_training() {
+    training_active = !training_active;
+    wins = 0;
+    losses = 0;
+    winstreak = 0;
+    redraw_screen();
+}
 
 elem = document.querySelector("#round-end-screen");
 elem.setAttribute('onclose', "continue_current_mode(); redraw_screen();");

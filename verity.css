@@ -305,7 +305,7 @@ body {
 #tutorial-panes.active {
     display: block;
     backdrop-filter: blur(15px);
-    background-color: #d2d2d299;
+    background-color: #d2d2d2a9;
     position: fixed;
     right: 0;
     top: max(5vh, 45px);
@@ -320,11 +320,12 @@ body {
 .tutorial-step {
     font-family: monospace;
     font-size: large;
+    color: #a88;
 }
 .current-tutorial-step {
-    color: #484;
+    color: #363;
     font-weight: bold;
-    text-shadow: 0px 0px 3px #4f4, 0px 0px 3px #4f4, 0px 0px 15px #4a4;
+    text-shadow: 0px 0px 3px #4f4, 0px 0px 5px #4f4, 0px 0px 15px #4a4;
 }
 .small-tip {
     font-size: smaller;
