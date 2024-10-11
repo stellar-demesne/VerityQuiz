@@ -22,17 +22,17 @@ body {
 #options-area {
     display: grid;
     justify-items: center;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 2fr 4fr 4fr 4fr 4fr 4fr;
 }
 
 #options-choose-tutorial, #options-choose-training {
     color: #667;
 }
-#options-choose-inside {
+#holder-options-choose-inside {
     grid-column: 2;
 }
-#options-choose-full {
-    min-width: 6em;
+#holder-options-choose-full {
+    min-width: 7.8em;
 }
 #options-choose-faststrat {
     grid-column: 2;
@@ -60,6 +60,7 @@ body {
 #streak {
     min-width: 6em;
 }
+
 #round-end-screen {
     border-style: none;
     border-radius: 15px;

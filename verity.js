@@ -1245,34 +1245,34 @@ function draw_outside() {
 
 function redraw_screen() {
     if (interleave_modes) {
-        elem = document.querySelector("#options-choose-full");
+        elem = document.querySelector("#holder-options-choose-full");
         elem.setAttribute('class', 'this-is-a-button enabled-mode');
         if (current_phase == PHASE_OUTSIDE) {
-            elem = document.querySelector("#options-choose-outside");
+            elem = document.querySelector("#holder-options-choose-outside");
             elem.setAttribute('class', 'this-is-a-button incidental-enabled-mode');
-            elem = document.querySelector("#options-choose-inside");
+            elem = document.querySelector("#holder-options-choose-inside");
             elem.setAttribute('class', 'this-is-a-button');
         }
         else {
-            elem = document.querySelector("#options-choose-outside");
+            elem = document.querySelector("#holder-options-choose-outside");
             elem.setAttribute('class', 'this-is-a-button');
-            elem = document.querySelector("#options-choose-inside");
+            elem = document.querySelector("#holder-options-choose-inside");
             elem.setAttribute('class', 'this-is-a-button incidental-enabled-mode');
         }
     }
     else {
-        elem = document.querySelector("#options-choose-full");
+        elem = document.querySelector("#holder-options-choose-full");
         elem.setAttribute('class', 'this-is-a-button');
         if (current_phase == PHASE_OUTSIDE) {
-            elem = document.querySelector("#options-choose-outside");
+            elem = document.querySelector("#holder-options-choose-outside");
             elem.setAttribute('class', 'this-is-a-button enabled-mode');
-            elem = document.querySelector("#options-choose-inside");
+            elem = document.querySelector("#holder-options-choose-inside");
             elem.setAttribute('class', 'this-is-a-button');
         }
         else {
-            elem = document.querySelector("#options-choose-outside");
+            elem = document.querySelector("#holder-options-choose-outside");
             elem.setAttribute('class', 'this-is-a-button');
-            elem = document.querySelector("#options-choose-inside");
+            elem = document.querySelector("#holder-options-choose-inside");
             elem.setAttribute('class', 'this-is-a-button enabled-mode');
         }
     }
@@ -1325,7 +1325,7 @@ function is_tutorial_step_active(inherited_elem, inherited_query, activation_cha
 function show_training() {
     if (training_active) {
         var query_boolean;
-        elem = document.querySelector("#options-choose-training");
+        elem = document.querySelector("#holder-options-choose-training");
         elem.setAttribute('class', 'this-is-a-button incidental-enabled-mode');
         elem = document.querySelector("#tutorial-panes");
         elem.setAttribute('class', 'active');
@@ -1478,7 +1478,7 @@ function show_training() {
         }
     }
     else {
-        elem = document.querySelector("#options-choose-training");
+        elem = document.querySelector("#holder-options-choose-training");
         elem.setAttribute('class', 'this-is-a-button');
         elem = document.querySelector("#tutorial-panes");
         elem.removeAttribute('class');

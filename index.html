@@ -7,13 +7,25 @@
 <body>
 <div id="meta-area">
     <div id="options-area">
-        <div id="options-choose-inside" class="this-is-a-button">Inside</div>
-        <div id="options-choose-outside" class="this-is-a-button">Outside</div>
-        <div id="options-choose-full" class="this-is-a-button">Random side</div>
+        <div id="holder-options-choose-inside" class="this-is-a-button">
+            <input type="radio" name="encounter-part-choice" id="options-choose-inside" autocomplete="off">
+            <label for="options-choose-inside">Inside</label>
+        </div>
+        <div id="holder-options-choose-outside" class="this-is-a-button">
+            <input type="radio" name="encounter-part-choice" id="options-choose-outside" checked autocomplete="off">
+            <label for="options-choose-outside">Outside</label>
+        </div>
+        <div id="holder-options-choose-full" class="this-is-a-button">
+            <input type="radio" name="encounter-part-choice" id="options-choose-full" autocomplete="off">
+            <label for="options-choose-full">Random Side</label>
+        </div>
         <div id="options-choose-tutorial" class="this-is-a-button">Tutorial Mode</div>
-        <div id="options-choose-training" class="this-is-a-button">Steps Tracker</div>
+        <div id="holder-options-choose-training" class="this-is-a-button">
+            <input id="options-choose-training" type="checkbox" id="training" autocomplete="off">
+            <label for="options-choose-training">Guided Mode</label>
+        </div>
         <div id="options-choose-faststrat">
-            <input type="checkbox" id="sorting" checked><label for="sorting">Fast Strat</label>
+            <input type="checkbox" id="sorting" checked><label for="sorting" autocomplete="off">Fast Strat</label>
         </div>
     </div>
     <div id="meta-spacer"></div>
@@ -23,7 +35,7 @@
             <div id="losses"></div>
             <div id="streak"></div>
         </div>
-        <div id="score-reset" class="this-is-a-button">Reset</div>
+        <button type="button" id="score-reset" class="this-is-a-button">Reset</button>
     </div>
 </div>
 <div id="round-end-div">
