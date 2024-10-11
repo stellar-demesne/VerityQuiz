@@ -115,7 +115,6 @@ var inside_state = {
 
     reset: function () {
         // randomize starting state
-        console.log('reset');
         this.guardian_shapes = random_choose(SPLINTERS_LOCS, 3);
         this.position = random_choose([LEFT, CENTRE, RIGHT], 1);
         this.waiting_shapes = [];
@@ -187,7 +186,6 @@ var inside_state = {
     },
 
     kill_knight: function (loc) {
-        console.log('kill', loc);
         if (this.ghost_time) {
             victory_state = END_DEFEAT;
             end_explanatory_text = "You tried to kill a knight while dead or before calling out who you saw";
@@ -218,7 +216,6 @@ var inside_state = {
     },
 
     pickup: function (loc) {
-        console.log('pickup', loc);
         if (this.ghost_time) {
             victory_state = END_DEFEAT;
             end_explanatory_text = "You tried to pick up a splinter while dead or before calling out who you saw";
@@ -247,7 +244,6 @@ var inside_state = {
     },
 
     kill_ogre: function () {
-        console.log('kill_ogre');
         if (this.ghost_time) {
             victory_state = END_DEFEAT;
             end_explanatory_text = "You tried to kill your ogre while dead and/or before calling out who you saw.";
@@ -267,7 +263,6 @@ var inside_state = {
     },
 
     register: function (loc) {
-        console.log('register', this.shape_held, loc);
         // register ours
         if (loc == this.position) {
             // TODO: return immediately, timeout symbols-on-ground, merely recieve stuff?
@@ -456,6 +451,11 @@ var inside_state = {
     },
 
     wait_for_sort: function () {
+        if (!this.yet_sorting) {
+            victory_state = END_DEFEAT;
+            end_explanatory_text = "Everyone already called for the splitting to happen. Calling for it again is wrong.";
+            return;
+        }
         var wall_shapes = this.list_of_all_shapes();
         var insufficiently_generous = this.possess_another_shape();
         if (insufficiently_generous) {
@@ -493,7 +493,6 @@ var inside_state = {
     },
 
     leave: function () {
-        console.log('lemme ouuutt');
         if (size_of_shape(this.shape_held) < 2) {
             // not holding a double? fail.
             victory_state = END_DEFEAT;
@@ -554,7 +553,6 @@ var outside_state = {
 
     reset: function () {
         // randomize starting state
-        console.log('reset');
         this.inside_callout = random_choose(SPLINTERS_LOCS, 3);
         this.shapes = random_choose(SPLINTERS_LOCS, 3);
         for (var i = 0; i < 3; i++) {
@@ -573,7 +571,6 @@ var outside_state = {
     },
 
     kill: function (loc) {
-        console.log('kill', loc);
         if (this.ghosts_present || this.ghost_held != null) {
             if (this.acted_during_ghosts) {
                 victory_state = END_DEFEAT;
@@ -588,7 +585,6 @@ var outside_state = {
     },
 
     pickup: function (loc) {
-        console.log('pickup', loc);
         if (this.ghosts_present || this.ghost_held != null) {
             if (this.acted_during_ghosts) {
                 victory_state = END_DEFEAT;
@@ -611,7 +607,6 @@ var outside_state = {
     },
 
     kill_ogre: function (loc) {
-        console.log('kill_ogre', loc);
         this.ogres[loc] = null;
         if (!this.ogres.includes(OGRE)) {
             this.knight_splinters = [KNIGHT, KNIGHT, KNIGHT];
@@ -685,14 +680,12 @@ var outside_state = {
         }
         this.ghosts_present = false;
         this.ghost_held = random_choose([GUARDIAN_A, GUARDIAN_B, GUARDIAN_C]);
-        console.log("you picked up ", this.ghost_held);
         var chosen_callouts = random_choose([GUARDIAN_A, GUARDIAN_B, GUARDIAN_C], 2);
         callouts_for_outside_ghosts(chosen_callouts[0], this.spawn_statues.indexOf(chosen_callouts[0]),
                                     chosen_callouts[1], this.spawn_statues.indexOf(chosen_callouts[1]));
     },
 
     place_ghost: function (loc) {
-        console.log('place_ghost', loc);
         if (this.ghost_held != this.spawn_statues[loc]) {
             // wrong ghostie
             victory_state = END_DEFEAT;
@@ -707,7 +700,6 @@ var outside_state = {
     },
 
     wait: function () {
-        console.log('waiting');
         if (this.ghosts_present) {
             victory_state = END_DEFEAT;
             end_explanatory_text = "You tried to leave when there were still ghosts not returned to their statues. Dead players can't leave!";
