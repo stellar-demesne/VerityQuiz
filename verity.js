@@ -1508,7 +1508,35 @@ elem = document.querySelector("#score-reset");
 elem.setAttribute('onclick', "continue_current_mode(); reset_scores();");
 
 elem = document.querySelector("#options-choose-tutorial");
-elem.setAttribute('onclick', "start_tutorial()");
+elem.setAttribute('onclick', "show_tutorial(); draw_giant_text_thing()");
+elem = document.querySelector("#close-explanation-screen");
+elem.setAttribute('onclick', "close_tutorial()");
+elem = document.querySelector("#explanation-screen");
+elem.setAttribute('onclick', "draw_giant_text_thing()");
+
+var tutorial_pane = false;
+
+function show_tutorial() {
+    elem = document.querySelector("#explanation-screen");
+    tutorial_pane = true;
+    elem.showModal();
+}
+function close_tutorial() {
+    elem = document.querySelector("#explanation-screen");
+    elem.close();
+}
+
+function draw_giant_text_thing() {
+    elem = document.querySelector("#explanation-page-texts");
+    var all_elem = elem.querySelectorAll("div")
+    for (var i = 0; i < all_elem.length; i++) {
+        all_elem[i].setAttribute('style', 'display: none');
+    }
+    elem = document.querySelector("#explanation-page-select :checked");
+    elem = document.querySelector("div#"+elem.id)
+    elem.setAttribute('style', 'display: block');
+}
+
 elem = document.querySelector("#options-choose-training");
 elem.setAttribute('onclick', "activate_training()");
 

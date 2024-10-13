@@ -25,18 +25,19 @@ body {
     grid-template-columns: 2fr 4fr 4fr 4fr 4fr 4fr;
 }
 
-#options-choose-tutorial, #options-choose-training {
-    color: #667;
-}
 #holder-options-choose-inside {
     grid-column: 2;
 }
-#holder-options-choose-full {
-    min-width: 7.8em;
-}
 #options-choose-faststrat {
     grid-column: 2;
-    min-width: 6em;
+}
+#holder-options-choose-training {
+    color: #667;
+    grid-column: 6;
+}
+#options-choose-tutorial {
+    position: relative;
+    top: 31px;
 }
 
 #score-tracker {
@@ -59,6 +60,46 @@ body {
 }
 #streak {
     min-width: 6em;
+}
+
+#explanation-screen {
+    width: max(70vw, 580px);
+    height: 720px;
+}
+#close-explanation-screen {
+    max-height: 2em;
+}
+#explanation-grid {
+    display: grid;
+    grid-template-columns: 1fr 10fr;
+    column-gap: 20px;
+}
+#explanation-explainer {
+    font-size: smaller;
+}
+#selections-title {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    user-select: none;
+}
+#explanation-page-select {
+    grid-column: 1;
+    width: 10em;
+}
+#explanation-page-select > .this-is-a-button {
+    width: 9.2em;
+    margin-top: -15px;
+    display:block;
+}
+.label-text {
+    text-align: center;
+    width: 9em;
+    left: 1em;
+    position: relative;
+    display: block;
+}
+.explanation-radio {
+    position: absolute;
 }
 
 #round-end-screen {
@@ -339,7 +380,7 @@ body {
 .this-is-a-button {
     color: #334;
     background-color: #ddd;
-    width: fit-content;
+    width: max-content;
     border-color: #ccc;
     border-radius: 5px;
     border-style: solid;
@@ -352,6 +393,9 @@ body {
 }
 .incidental-enabled-mode {
     background-image: radial-gradient( #8dd 0%, #ddd 90%);
+}
+.this-is-a-button:hover{
+    border-color: #777;
 }
 
 .knight {

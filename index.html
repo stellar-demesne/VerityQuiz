@@ -7,29 +7,29 @@
 <body>
 <div id="meta-area">
     <div id="options-area">
-        <div id="holder-options-choose-inside" class="this-is-a-button">
+        <label id="holder-options-choose-inside" class="this-is-a-button">
             <input type="radio" name="encounter-part-choice" id="options-choose-inside" autocomplete="off">
             <label for="options-choose-inside">Inside</label>
-        </div>
-        <div id="holder-options-choose-outside" class="this-is-a-button">
+        </label>
+        <label id="holder-options-choose-outside" class="this-is-a-button">
             <input type="radio" name="encounter-part-choice" id="options-choose-outside" checked autocomplete="off">
             <label for="options-choose-outside">Outside</label>
-        </div>
-        <div id="holder-options-choose-full" class="this-is-a-button">
+        </label>
+        <label id="holder-options-choose-full" class="this-is-a-button">
             <input type="radio" name="encounter-part-choice" id="options-choose-full" autocomplete="off">
             <label for="options-choose-full">Random Side</label>
-        </div>
-        <div id="options-choose-tutorial" class="this-is-a-button">Tutorial Mode</div>
-        <div id="holder-options-choose-training" class="this-is-a-button">
+        </label>
+        <label id="holder-options-choose-training" class="this-is-a-button">
             <input id="options-choose-training" type="checkbox" id="training" autocomplete="off">
             <label for="options-choose-training">Guided Mode</label>
-        </div>
+        </label>
         <div id="options-choose-faststrat">
             <input type="checkbox" id="sorting" checked><label for="sorting" autocomplete="off">Fast Strat</label>
         </div>
     </div>
     <div id="meta-spacer"></div>
     <div id="score-tracker">
+        <button id="options-choose-tutorial" class="this-is-a-button">Help</button>
         <div id="score-numbers">
             <div id="wins"></div>
             <div id="losses"></div>
@@ -37,6 +37,107 @@
         </div>
         <button type="button" id="score-reset" class="this-is-a-button">Reset</button>
     </div>
+</div>
+<div id="how-to-use">
+    <dialog id="explanation-screen">
+        <div id="explanation-grid">
+            <button id="close-explanation-screen" class="this-is-a-button">Return</button>
+            <div id="explanation-explainer">
+                Please select a pane to view at left. Click Return to leave this menu. This is a work-in-progress, please bear with me.
+            </div>
+            <div id="explanation-page-select">
+                <div id="selections-title">About:</div>
+                <label class="this-is-a-button">
+                    <input class="explanation-radio" type="radio" name="explanation-pane-choice" id="select-this-site" checked>
+                    <label class="label-text" for="select-this-site">This Site</label>
+                </label>
+                <br>
+                <label class="this-is-a-button">
+                    <input class="explanation-radio" type="radio" name="explanation-pane-choice" id="select-raids-general">
+                    <label class="label-text" for="select-raids-general">Verity's Basics</label>
+                </label>
+                <br>
+                <label class="this-is-a-button">
+                    <input class="explanation-radio" type="radio" name="explanation-pane-choice" id="select-verity-encounter">
+                    <label class="label-text" for="select-verity-encounter">Levers and Goal</label>
+                </label>
+                <br>
+                <label class="this-is-a-button">
+                    <input class="explanation-radio" type="radio" name="explanation-pane-choice" id="select-verity-outside-strat">
+                    <label class="label-text" for="select-verity-outside-strat">Outside Strategy</label>
+                </label>
+                <br>
+                <label class="this-is-a-button">
+                    <input class="explanation-radio" type="radio" name="explanation-pane-choice" id="select-verity-inside-sort-strat">
+                    <label class="label-text" for="select-verity-inside-sort-strat">Inside Strategy: Sorting</label>
+                </label>
+                <br>
+                <label class="this-is-a-button">
+                    <input class="explanation-radio" type="radio" name="explanation-pane-choice" id="select-verity-inside-fast-strat">
+                    <label class="label-text" for="select-verity-inside-fast-strat">Sorting Strategy: Fast</label>
+                </label>
+            </div>
+            <div id="explanation-page-texts">
+                <div id="select-this-site">
+                    <p>At the top of the screen, there is the meta section: choose your encounter mode, see your scores, enable or disable Guided Mode. Note that all of these buttons will reset any score you've accrued since you last changed modes.</p>
+                    <p>The main part of the screen (depicting the encounter in its current state) has three general sections - above the grey line is the wall projections area; at the bottom is the semicircle of six guardian statues, and right below the grey line is the main area.</p>
+                    <p>Destiny 2 is a First Person Shooter. The fact that this website is not an FPS means that many things are slightly different than they would be in-game. On the plus side, you can see the entire room at once without any add pressure making you feel rushed. The downside, however, is that "shooting" or "interacting" or anything like that is reduced to just clicking on the various pictures.</p>
+                    <p>Click on images of enemies to kill them; click on images of splinters to pick them up (if they aren't projections on the wall); click on statues to interact with them; click on images of ghosts to pick them up.</p>
+                    <p>On the other hand, the screen layout apart from your point of view has been mostly preserved: buffs (such as symbols you are holding) go on the lower left, and the chatbox is there on the lower right.</p>
+                    <p>Finally, this encounter requires you, in-game, to be able to distinguish the players of your fireteam by appearance. Managing to copy that amount of variety of fashion choices is outside of this website's scope, so here, a statue which denotes <em>you</em> merely has a little smiley face versus a blank face for the other solo guardians; or alternatively, the six guardians are merely labelled with letters A through F. (Trust me, you look great in-game.)</p>
+                </div>
+                <div id="select-raids-general">
+                    <p><i>Verity</i>, like most raid encounters builds upon the context of its raid, <i>Salvation's Edge</i>. However, the context is immediately discarded, and the only thing that remains is a simple foundation of three two-dimensional shapes: <strong>Circles, Triangles, and Squares</strong>. These three shapes' first letter can be used as an abreviation.<p>
+                    <p>This foundation is then doubled; each shape can be added to any one of the three shapes, resulting in any one of six three-dimensional shapes: Sphere (c+c), Cone (c+t), Cylinder (c+s), Tetrahedron (t+t), Prism (t+s), and Cube (s+s).</p>
+                    <p><i>Verity</i> is not completely unlike <em>all</em> other raid encounters. It is reminiscient of the <i>Vault</i> encounter from the <i>Last Wish</i> raid - you are given a puzzle box, must solve it three times, and then you may continue onwards.</p>
+                    <p>In comparison, <i>Verity</i>'s puzzle box is hard to understand because of how little one player sees of the box at any one time. In this way, practicing the encounter can help tremendously. However, because it <em>requires</em> 4 players to even start the encounter, this places a significant barrier to entry. This tool aims to help with that.</p>
+                </div>
+                <div id="select-verity-encounter">
+                    <p>At the bottom of the room (where, in-game, you arrive at the encounter), there is a semicircle of six statues, depicting your fireteam. On the front wall, there is a projector rotating through a variety of different shadows. In front of the shadow wall, there are three statues.</p>
+                    <p>Three players get put into solo or "inside" rooms, while the other three are left in the main or "outside" room. All four rooms must work together to arrange and obtain the correct Splinters (shapes dropped by Knights) in order to have the solo players return to the main room.</p>
+                    <p>Specifically: the three forward statues in the solo room show the three basic shapes being held as Shadows. <strong>In order to escape, each solo player must only see their own statue's shadow; each solo player must be holding the two other shapes' splinters simultaneously; and their statue in the main room must be holding the three-dimensional shape they are holding.</strong></p>
+                    <p>To get to that state, players will need to interact with the three statues at the front of the room. Particularly:</p>
+                    <ul>
+                        <li>A statue in a solo room loses its shadow when that room recieves a splinter from another room.</li>
+                        <li>A knight, on death, drops a splinter which matches one of the shapes on the wall of that room. When all knights are dead and more splinters can drop, killing the ogre that appears will spawn new knights.</li>
+                        <li>In solo rooms, splinters can be Registered at other players' solo statues to remove that shape from their wall and send that splinter to another room.</li>
+                        <li>In the main room, splinters can be Dissected from statues, which will swap that splinter out for a second splinter that was Dissected from a different statue.</li>
+                    </ul>
+                    <p>There is an additional burden: the adversary of the raid will at specific times, take action and halt the three solo players, putting their Ghosts into the main room. The main players must ferry these to the back of the room, wait for the solo players to call out the statues they can each see, and return that ghost to the correct statue. Between rounds, this happens again with <em>five</em> players being frozen. However, this mechanic does not work well here, so it has been simplified.</p>
+                </div>
+                <div id="select-verity-outside-strat">
+                    <p>Simply put: continue dissecting with splinters that are wrong until all three statues match the desired shapes.</p>
+                    <p>Your task is to make the statues mimic what the solo players are holding when they are done. To do that, you mimic two players passing splinters between their rooms by dissecting those splinters from each statue.</p>
+                    <p>Alternatively, you have been given an anti-recipe: the chat gets a callout of order ("tsc", for example). You need to make each statue not contain any of that shape, and more specifically, you need to make them contain one of each other shape. (so with the callout of "tsc", you would want the statues to hold Cylinder, Cone, Prism)</p>
+                    <p>It is always possible to do this in six dissections or less. At best (when you are lucky to get the three split shapes at start) it is possible to complete in four dissections. You do have time, so pausing before picking up a splinter to make sure you can dissect with that splinter usefully is good practice.</p>
+                </div>
+                <div id="select-verity-inside-sort-strat">
+                    <p>Simply put: give away every Splinter that doesn't match your shadow, call out to split, then hand one splinter to each other player's statue.</p>
+                    <p>This strategy (the "normal", "slow", or "sorting" strategy) follows a definite, straightforward sequence of steps, as follows:</p>
+                    <ol>
+                        <li>Immediately, as always when you are inside, note down the order of the shadows on the statues. This is both for reference for yourself and your fellow solo players, but it is also for the main room.</li>
+                        <li>If your wall has any shapes that don't match your own statue's shadow, kill knights until you see that splinter, then Register it to the statue which is holding that shadow. (If your wall only has shapes which match, then do nothing for this step)</li>
+                        <li>Wait/call for the split to happen. This is a good time to breathe, get ready, and decide an order to interact with your statues in the next step.</li>
+                        <li>Pickup each of your shadow's splinters in turn, and Register them to each of the other player's statues. <em>Do not</em> Register them both in the same statue.</li>
+                        <li>Pick up both splinters you just recieved from the other two players.</li>
+                        <li>Exit through the now-shattered glass wall into the back half of the main room.</li>
+                    </ol>
+                    <p>This strategy trades time for simplicity... mostly. More accurately, instead of a burst of thinking at the start, it instead chooses to depend instead on being able to keep track of where in the sequence you currently are.</p>
+                    <p>Another tradeoff is that this strategy takes more than the required amount of time: the inside can be finished with 6 Registrations, but this strategy can take anywhere from 6 to <em>9</em> to finish. There is enough time for using this strategy, all the same.</p>
+                </div>
+                <div id="select-verity-inside-fast-strat">
+                    <p>In theory: hand Splinters to people who can't otherwise recieve that Splinter from someone else.</p>
+                    <p>This strategy (the "fast" strategy) is built out of the realisation that the sorting phase is <em>completely unnecessary</em>. Consider: your statue is holding Circle, but you have a Triangle. However, the player who holds Triangle already has one triangle (this is <em>always</em> true!). Thus, they already have the triangle they will give you, and your copy of triangle's destination is the other solo player.</p>
+                    <p>Each player can follow simple logic to deduce where both splinters should go, and then give both splinters immediately to their final destinations. The logic runs thus:</p>
+                    <ul>
+                        <li>If any player has two of a single splinter, then everyone must Register their splinters to two different statues. If you have one of someone else's splinters, then that splinter goes to the <em>third</em> player.</li>
+                        <li>If no player has two of a single splinter, then everyone can and should Register their splinters to exactly one statue - the statue which is not holding one of those splinters as its shadow.</li>
+                    </ul>
+                    <p>Upon arrival in the solo rooms, take the moment to note down the order of the shadows, and call out if you see two of a single shape on the wall ("Doubles" or "No doubles"). Then, once everyone has taken a few seconds to make sure they know what they must do, then all three solo players can begin to work immediately, and do not need to pause to make sure everyone catches up. Simply Register your two splinters, pick up the two splinters you recieve, and then exit.</p>
+                </div>
+            </div>
+        </div>
+    </dialog>
 </div>
 <div id="round-end-div">
     <dialog id="round-end-screen">
